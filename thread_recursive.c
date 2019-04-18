@@ -9,21 +9,18 @@ typedef struct data {
 
 void *rf(void* dd) {
 	data *d = (data*)dd;
-	/**printf("d->num = %d\n", d->num);	*/
 	
 	if ( (d->num) == 1 || (d->num) == 2) {
 		(d->result) = 1;
-		/**printf("result = %d\n", d->result);*/
 	}
 	else {
 		
+		/* 必須 malloc 因為 runtime 才知道會不會執行到 */
 		data *d1 = (data*)malloc(sizeof(data));
 		data *d2 = (data*)malloc(sizeof(data));
 
 		d1->num = (d->num) -1;
-		/**printf("d1->num = %d\n", d1->num);*/
 		d2->num = (d->num) -2;
-		/**printf("d2->num = %d\n", d2->num);*/
 
 		pthread_t t1, t2;
 
@@ -37,16 +34,18 @@ void *rf(void* dd) {
 		pthread_join(t2, NULL);
 		(d->result) = (d1->result) + (d2->result);			
 	}
-	/**pthread_exit(NULL);*/
+	pthread_exit(NULL);
 }
 
 int main() {
 	int num;
 	scanf("%d", &num);
-	data* d;
+	
+	/* 其實這個 d 不需要 malloc，因為一定位被執行到，屬於編譯時期已知 */
+	data* d = (data*)malloc(sizeof(data));
 	d->num = num;
-	rf((void*)d);
-	/**pthread_t t;*/
-	/**int ret = pthread_create(&t, NULL, rf, (void*)d);*/
+	
+	pthread_t t;
+	int ret = pthread_create(&t, NULL, rf, (void*)d);
 	printf("result = %d\n", d->result);
 }
