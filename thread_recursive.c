@@ -44,8 +44,9 @@ int main() {
 	/* 其實這個 d 不需要 malloc，因為一定位被執行到，屬於編譯時期已知 */
 	data* d = (data*)malloc(sizeof(data));
 	d->num = num;
-	
+	/**rf((void*)d);	*/
 	pthread_t t;
 	int ret = pthread_create(&t, NULL, rf, (void*)d);
+	pthread_join(t, NULL);
 	printf("result = %d\n", d->result);
 }
