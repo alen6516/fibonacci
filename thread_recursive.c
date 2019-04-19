@@ -40,8 +40,8 @@ void *rf(void* dd) {
 int main() {
 	int num;
 	scanf("%d", &num);
-	
-	/* 其實這個 d 不需要 malloc，因為一定位被執行到，屬於編譯時期已知 */
+
+	/* 必須 malloc */ 	
 	data* d = (data*)malloc(sizeof(data));
 	d->num = num;
 	/**rf((void*)d);	*/
